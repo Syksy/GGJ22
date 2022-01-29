@@ -10,7 +10,13 @@ public class Game : MonoBehaviour
     private string myLog;
     private List<string> myLogQueue = new List<string>();
     // Maximum number of debug messages stored
-    private int maxDebug = 10;
+    private int maxDebug = 20;
+
+    // Map precision parameters;
+    // interpretation as presented in https://docs.microsoft.com/en-us/bingmaps/articles/bing-maps-tile-system
+    public int lod = 20; // Level of Depth, 20 
+    public int tileSize = 256; // Customizable tile sizes; how many pixels will construct a playable tile
+
 
     // Game status polling interval
     private static float interval = 5.0f;
@@ -143,6 +149,5 @@ public class Game : MonoBehaviour
     {
         Application.logMessageReceived -= HandleLog;
     }
-
 
 }
