@@ -11,12 +11,12 @@ public class PermissionsRationaleDialog : MonoBehaviour
 
     void DoMyWindow(int windowID)
     {
-        GUI.Label(new Rect(10, 20, kDialogWidth - 20, kDialogHeight - 50), "Please let me use the microphone.");
+        GUI.Label(new Rect(10, 20, kDialogWidth - 20, kDialogHeight - 50), "Please let me use the GPS.");
         GUI.Button(new Rect(10, kDialogHeight - 30, 100, 20), "No");
         if (GUI.Button(new Rect(kDialogWidth - 110, kDialogHeight - 30, 100, 20), "Yes"))
         {
 #if PLATFORM_ANDROID
-            Permission.RequestUserPermission(Permission.Microphone);
+            Permission.RequestUserPermission(Permission.FineLocation);
 #endif
             windowOpen = false;
         }

@@ -104,6 +104,21 @@ namespace Microsoft.MapPoint
             pixelY = (int)Clip(y * mapSize + 0.5, 0, mapSize - 1);
         }
 
+        // Variant that allows fragments of pixels
+        public static void LatLongToPixelXY(double latitude, double longitude, int levelOfDetail, out double pixelX, out double pixelY, int tileSize)
+        {
+            latitude = Clip(latitude, MinLatitude, MaxLatitude);
+            longitude = Clip(longitude, MinLongitude, MaxLongitude);
+
+            double x = (longitude + 180) / 360;
+            double sinLatitude = Math.Sin(latitude * Math.PI / 180);
+            double y = 0.5 - Math.Log((1 + sinLatitude) / (1 - sinLatitude)) / (4 * Math.PI);
+
+            uint mapSize = MapSize(levelOfDetail, tileSize);
+            pixelX = Clip(x * mapSize + 0.5, 0, mapSize - 1);
+            pixelY = Clip(y * mapSize + 0.5, 0, mapSize - 1);
+        }
+
         /// <summary>  
         /// Converts a pixel from pixel XY coordinates at a specified level of detail  
         /// into latitude/longitude WGS-84 coordinates (in degrees).  
@@ -124,6 +139,16 @@ namespace Microsoft.MapPoint
             longitude = 360 * x;
         }
 
+        // Variant that allows fragments of pixels
+        public static void PixelXYToLatLong(double pixelX, double pixelY, int levelOfDetail, out double latitude, out double longitude, int tileSize)
+        {
+            double mapSize = MapSize(levelOfDetail, tileSize);
+            double x = (Clip(pixelX, 0, mapSize - 1) / mapSize) - 0.5;
+            double y = 0.5 - (Clip(pixelY, 0, mapSize - 1) / mapSize);
+
+            latitude = 90 - 360 * Math.Atan(Math.Exp(-y * 2 * Math.PI)) / Math.PI;
+            longitude = 360 * x;
+        }
         /// <summary>  
         /// Converts pixel XY coordinates into tile XY coordinates of the tile containing  
         /// the specified pixel.  
